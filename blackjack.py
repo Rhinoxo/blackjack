@@ -48,6 +48,11 @@ def scoreHand(hand):
             score += rank + 1
     return score
 
+def printStatus(score,hand):
+    print ("Hand:")
+    printHand(hand)
+    print (" Score: "+str(score))
+
 
 # Main
 #test_deck()
@@ -55,18 +60,63 @@ def scoreHand(hand):
 # Deal two cards
 phand=[]
 dhand=[]
-
+play=True
 deck=setupDeck()
 
 phand.append(deck.pop())
 dhand.append(deck.pop())
 phand.append(deck.pop())
 dhand.append(deck.pop())
+pscore=scoreHand(phand)
+dscore=scoreHand(dhand)
 
-print ("\nPlayers hand:")
-printHand(phand)
-print ("Score: "+str(scoreHand(phand)))
-print ("\nDealers hand:")
-printHand(dhand)
-print ("Score: "+str(scoreHand(dhand)))
+print("\nPlayer ")
+printStatus(pscore, phand)
+print("\nDealer ")
+printStatus(dscore, dhand)
+if pscore == 21:
+    print("You Win!")
+    play=False
+elif dscore == 21:
+    print("You Lose!")
+    play=False
+while play:
+    if pscore < 21:
+        while pscore < 21:
+            answer=input("Hit or Stand?")
+            if answer.lower() == "hit":
+                phand.append(deck.pop())
+            elif answer.lower() == "stand":
+                break
+            else:
+                answer=input("Answer Not Valid! Try Again!")
+                pscore=scoreHand(phand)
+                dscore=scoreHand(dhand)
+                print("\nPlayer ")
+                printStatus(pscore, phand)
+                print("\nDealer ")
+                printStatus(dscore, dhand)
+    elif pscore == 21:
+        break
+    else:
+        print("You Lost!")
+        play=False
+        break
+    if dscore <=16:
+        while dscore <= 16:
+            dhand.append(deck.pop())
+            pscore=scoreHand(phand)
+            dscore=scoreHand(dhand)
+            print("\nPlayer ")
+            printStatus(pscore, phand)
+            print("\nDealer ")
+            printStatus(dscore, dhand)
+    if pscore > dscore:
+        print("You Win "+str(pscore)+" to "+str(dscore))
+        play=False
+    elif pscore < dscore:
+        print("You Lost "+str(pscore)+" to "+str(dscore))
+        play=False
+
+
 
