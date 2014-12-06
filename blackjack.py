@@ -4,6 +4,15 @@
 
 import random
 
+# TODO:
+# Finish win/loss logic
+# Be able to play multiple games
+# Handle Ace correctly
+# Cleanup display
+# Ability to bet
+# Splitting hands
+# Double down
+
 def setupDeck ():
     deck=[]
     for rank in range(0,13):
