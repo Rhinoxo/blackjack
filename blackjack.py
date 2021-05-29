@@ -19,7 +19,7 @@ def setupDeck ():
         for suit in range(0,4):
             card=[rank,suit]
             deck.append(card)
-    random.shuffle(deck);
+    random.shuffle(deck)
     return deck
 
 def printCard(card):
@@ -76,8 +76,8 @@ phand.append(deck.pop())
 dhand.append(deck.pop())
 phand.append(deck.pop())
 dhand.append(deck.pop())
-pscore=scoreHand(phand)
-dscore=scoreHand(dhand)
+pscore = scoreHand(phand)
+dscore = scoreHand(dhand)
 
 print("\nPlayer ")
 printStatus(pscore, phand)
@@ -99,12 +99,12 @@ while play:
                 break
             else:
                 answer=input("Answer Not Valid! Try Again!")
-                pscore=scoreHand(phand)
-                dscore=scoreHand(dhand)
-                print("\nPlayer ")
-                printStatus(pscore, phand)
-                print("\nDealer ")
-                printStatus(dscore, dhand)
+            pscore=scoreHand(phand)
+            dscore=scoreHand(dhand)
+            print("\nPlayer ")
+            printStatus(pscore, phand)
+            print("\nDealer ")
+            printStatus(dscore, dhand)
     elif pscore == 21:
         break
     else:
