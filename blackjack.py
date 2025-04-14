@@ -2,6 +2,13 @@
 # Started December 5, 2014
 # by Justin Orner and Lance Orner
 
+# Last Updated: April 13,2025
+
+# This is a simple blackjack program that allows the user to play against the dealer.
+# The user can hit or stand, and the dealer will hit until they reach a score of 17 or higher.
+# The program will check for blackjack and busts, and will display the final scores.
+# The program will also check for a push (tie) and will display the result of the game.
+
 import random
 
 # TODO:
@@ -13,7 +20,7 @@ import random
 # Splitting hands
 # Double down
 
-def setupDeck ():
+def setupDeck():
     deck=[]
     for rank in range(0,13):
         for suit in range(0,4):
@@ -49,10 +56,15 @@ def scoreHand(hand):
     score=0
     for card in hand:
         rank = card[0]
+        # Ace is 1 or 11
         if rank == 0:
-            score+=11
+            if score + 11 > 21:
+                score += 1
+            else:
+                score += 11
+        # Face cards are 10
         elif rank == 10 or rank == 11 or rank == 12:
-            score+=10
+            score += 10
         else:
             score += rank + 1
     return score
@@ -61,6 +73,11 @@ def printStatus(score,hand):
     print ("Hand:")
     printHand(hand)
     print (" Score: "+str(score))
+
+def dealCard(hand):
+    card=deck.pop()
+    hand.append(card)
+    return card
 
 
 # Main
@@ -72,10 +89,10 @@ dhand=[]
 play=True
 deck=setupDeck()
 
-phand.append(deck.pop())
-dhand.append(deck.pop())
-phand.append(deck.pop())
-dhand.append(deck.pop())
+dealCard(phand)
+dealCard(dhand)
+dealCard(phand)
+dealCard(dhand)
 pscore = scoreHand(phand)
 dscore = scoreHand(dhand)
 
@@ -83,6 +100,11 @@ print("\nPlayer ")
 printStatus(pscore, phand)
 print("\nDealer ")
 printStatus(dscore, dhand)
+
+#Check for blackjack
+if pscore == 21 and dscore == 21:
+    print("Push!")
+    play=False
 if pscore == 21:
     print("You Win!")
     play=False
@@ -90,41 +112,51 @@ elif dscore == 21:
     print("You Lose!")
     play=False
 while play:
-    if pscore < 21:
-        while pscore < 21:
-            answer=input("Hit or Stand?")
-            if answer.lower() == "hit":
-                phand.append(deck.pop())
-            elif answer.lower() == "stand":
-                break
-            else:
-                answer=input("Answer Not Valid! Try Again!")
-            pscore=scoreHand(phand)
-            dscore=scoreHand(dhand)
-            print("\nPlayer ")
-            printStatus(pscore, phand)
-            print("\nDealer ")
-            printStatus(dscore, dhand)
-    elif pscore == 21:
+    # Player turn
+    while pscore < 21:
+        answer=input("Hit or Stand?")
+        if answer.lower() == "hit":
+            dealCard(phand)
+        elif answer.lower() == "stand":
+            break
+        else:
+            answer=input("Answer Not Valid! Try Again!")
+        pscore=scoreHand(phand)
+        dscore=scoreHand(dhand)
+        print("\nPlayer ")
+        printStatus(pscore, phand)
+        print("\nDealer ")
+        printStatus(dscore, dhand)
+    if pscore == 21:
+        print("You Win!")
+        play=False
         break
-    else:
+    elif pscore > 21:
         print("You Lost!")
         play=False
         break
-    if dscore <=16:
-        while dscore <= 16:
-            dhand.append(deck.pop())
-            pscore=scoreHand(phand)
-            dscore=scoreHand(dhand)
-            print("\nPlayer ")
-            printStatus(pscore, phand)
-            print("\nDealer ")
-            printStatus(dscore, dhand)
-    if pscore > dscore:
+
+    # Dealer turn
+    while dscore <= 16:
+        dealCard(dhand)
+        pscore=scoreHand(phand)
+        dscore=scoreHand(dhand)
+        print("\nPlayer ")
+        printStatus(pscore, phand)
+        print("\nDealer ")
+        printStatus(dscore, dhand)
+
+    # Final scoring
+    if pscore > dscore or dscore > 21:
+        if dscore > 21:
+            print("Dealer Bust!")
         print("You Win "+str(pscore)+" to "+str(dscore))
         play=False
     elif pscore < dscore:
         print("You Lost "+str(pscore)+" to "+str(dscore))
+        play=False
+    elif pscore == dscore:
+        print("Push!")
         play=False
 
 
